@@ -1,0 +1,4 @@
+{
+    presets: ["es2015-riot", "stage-3"],
+    plugins: ["add-module-exports"]
+}

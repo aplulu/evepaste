@@ -1,0 +1,21 @@
+{
+  "name": "evepaste",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "ayunyan <ayunyan@gmail.com>"
+  ],
+  "license": "proprietary",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootswatch-dist": "slate",
+    "riot": "^2.5.0"
+  }
+}

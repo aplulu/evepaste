@@ -1,0 +1,7 @@
+indexes:
+- kind: Paste
+  ancestor: no
+  properties:
+  - name: User.ID
+  - name: Created
+    direction: desc

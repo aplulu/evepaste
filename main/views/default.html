@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="EVE Online Paste tool">
+  <meta name="author" content="Far East Dominions">
+
+  {{css "application.css?2016071801"}}
+  <title>{{if .Title}}{{.Title}} - {{end}}EVEPaste</title>
+</head>
+
+<body>
+<app-loading></app-loading>
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">EVEPaste</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li{{if .IsHome}} class="active"{{end}}><a href="/">{{i18n .Lang "pastes"}}</a></li>
+        {{if .Logged}}
+        <li{{if .IsHistory}} class="active"{{end}}><a href="{{urlfor `PastesController.History`}}">{{i18n .Lang `history`}}</a></li>
+        {{end}}
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{i18n .Lang .CurLang}} <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            {{range .RestLangs}}
+            <li><a href="?lang={{.Lang}}" data-lang="{{.Lang}}" class="lang-changed">{{.Name}}</a></li>
+            {{end}}
+          </ul>
+        </li>
+        {{if .Logged}}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img src="https://imageserver.eveonline.com/Character/{{.User.ID}}_32.jpg" width="20" height="20"> {{.User.Name}} <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{{urlfor `AccountsController.Logout`}}">{{i18n .Lang "logout"}}</a></li>
+          </ul>
+        </li>
+        {{else}}
+        <li><a href="{{urlfor `AccountsController.Login`}}">{{i18n .Lang "login"}}</a></li>
+        {{end}}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{{if .flash.notice}}
+<div class="container">
+  <div class="alert alert-success">
+    {{.flash.notice}}
+  </div>
+</div>
+{{end}}
+
+{{if or .errors .flash.error}}
+<div class="container">
+  <div class="alert alert-danger">
+    {{if .flash.error}}
+    {{.flash.error}}
+    {{end}}
+    <ul>
+      {{range .errors}}
+      <li>{{.}}</li>
+      {{end}}
+    </ul>
+  </div>
+</div>
+{{end}}
+
+<div class="container">
+  {{.LayoutContent}}
+</div>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <p class="footer-copyright">(c) 2016 Far East Dominions All rights Reserved. </p>
+        <p class="footer-ingame-mail">{{i18nH .Lang "ingame_mail"}}</p>
+        <ul>
+          <li><span class="text-muted">{{goVersion}} {{processTime .StartTime}}</span></li>
+          <li><a href="https://github.com/aplulu/evepaste">GitHub</a></li>
+          <li><a href="{{urlfor `PagesController.Legal`}}">CCP Copyright Notice</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<script type="application/json" id="langs">{{jsLang .Lang `ships,structures,ongrid,offgrid,filters,total,everything,all,capitals,solarsystem,constellation,region,security,controltower,online,offline,en,de,it,fr,ja,ru,zh,eft,eft_ingame,dna,clf,export_format,export,language,close,raw,crest,crest_login_required`}}</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+{{javascript "application.js?2016071801"}}
+</body>
+</html>

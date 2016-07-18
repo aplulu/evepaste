@@ -1,0 +1,28 @@
+appname = evepaste
+httpport = 8080
+runmode = dev
+sessionon = true
+SessionProvider = appengine
+SessionName = S
+SessionGCMaxLifetime = 1209600
+SessionCookieLifeTime = 31536000
+
+[eve]
+systems = 30002187|30002659|30002053|30000142|30002510|0
+
+[lang]
+types = en|ja|de|fr|ru
+names = English|Japanese|Deutsch|French|Russian
+evetypes = en|de|fr|ja|ru|zh
+
+
+[eveoauth2_dev]
+client_id =
+client_secret =
+redirect_url =
+
+[eveoauth2]
+client_id =
+client_secret =
+redirect_url =
+

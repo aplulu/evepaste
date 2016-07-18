@@ -1,0 +1,148 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form action="/" method="post">
+                    <textarea class="form-control" rows="6" name="text" id="textArea" placeholder="{{i18nH .Lang `text_placeholder`}}"></textarea>
+                    <div class="form-group form-submit">
+                        <div class="col-sm-7">
+                            <button type="submit" class="btn btn-primary">{{i18n .Lang "submit"}}</button>
+                            <button type="reset" class="btn btn-default">{{i18n .Lang "reset"}}</button>
+                        </div>
+                        <div class="col-sm-5">
+                            <select class="form-control" name="system_id">
+                                {{range .Systems}}
+                                <option value="{{.}}" {{if eq "30000142" .}}selected="selected"{{end}}>{{systemName $.Lang .}}</option>
+                                {{end}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="compress_ore"> {{i18n .Lang "compress_oreice"}}
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="decompress_ore"> {{i18n .Lang "decompress_oreice"}}
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3>
+            <a href="{{urlfor `PastesController.View` `:id` .Paste.EncodedID}}">{{.Title}}</a>
+            <paste-tool  paste-id="{{.Paste.EncodedID}}">
+                <a href="{{urlfor `PastesController.View` `:id` .Paste.EncodedID}}" class="btn btn-default" role="button">{{i18n .Lang "permalink"}}</a>
+            </paste-tool>
+
+            <p class="paste-timestamp">
+                {{with $pt := i18n .Lang .Paste.Type}}
+                {{with $t := time $.Lang $.Paste.Created}}
+                {{i18n $.Lang "is_created_at" $pt $t}}
+                {{end}}
+                {{end}}
+            </p>
+        </h3>
+
+        {{if .IsDscan}}
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#dscan" role="tab" data-toggle="tab">{{i18n .Lang `dscan`}}</a></li>
+            <li role="presentation"><a href="#price" role="tab" data-toggle="tab">{{i18n .Lang `price`}}</a></li>
+        </ul>
+        {{end}}
+
+        <div class="tab-content">
+            {{if .IsDscan}}
+            <div role="tabpanel" class="tab-pane active" id="dscan">
+                <script type="application/json" id="scanResult">{{encodeJSON .ScanResult}}</script>
+
+                <dscan-result></dscan-result>
+            </div>
+            {{end}}
+            <div role="tabpanel" class="tab-pane{{if not .IsDscan}} active{{end}}" id="price">
+                <div class="row row-info">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            {{with $system := systemNameI $.Lang $.Paste.MarketSystemID}}
+                            {{with $p := aboutPrice $.Lang $.Paste.TotalSellPrice}}
+                            <li>{{i18nH $.Lang "estimated_sell_system" $p $system}}</li>
+                            {{end}}
+                            {{with $p := aboutPrice $.Lang $.Paste.TotalBuyPrice}}
+                            <li>{{i18nH $.Lang "estimated_buy_system" $p $system}}</li>
+                            {{end}}
+                            {{end}}
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        {{if .IsFit}}
+                        <fit-export eve-langs="{{eveLangCodes}}" cur-lang="{{.Lang}}" logged="{{.Logged}}"></fit-export>
+                        {{end}}
+                    </div>
+                </div>
+
+                <table class="table table-striped table-price">
+                    <thead>
+                    <tr>
+                        <th>{{i18n .Lang "item"}}</th>
+                        <th>{{i18n .Lang "qty"}}</th>
+                        <th>{{i18n .Lang "vol"}}</th>
+                        <th>{{i18n .Lang "single_sell"}}<br/>{{i18n .Lang "single_buy"}}</th>
+                        <th>{{i18n .Lang "total_sell"}}<br/>{{i18n .Lang "total_buy"}}</th>
+                        <th>{{i18n .Lang "volume_sell"}}<br/>{{i18n .Lang "volume_buy"}}</th>
+                    </tr>
+                    </thead>
+                    {{if .IsFit}}
+                    {{range .Fit.Slots}}
+                    <tbody>
+                    <tr>
+                        <td colspan="6" class="table-group-caption">{{i18n $.Lang .Name}}</td>
+                    </tr>
+                    {{range .Items}}
+                    <tr>
+                        <td class="item-name"><img src="https://imageserver.eveonline.com/Type/{{.TypeId}}_32.png" width="32" height="32"> <a href="https://eve-central.com/home/quicklook.html?typeid={{.TypeId}}">{{.TypeName}}</a></td>
+                        <td class="item-quantity">{{comma .Quantity}}</td>
+                        <td class="item-volume">{{.Volume}}</td>
+                        <td>{{itemPrice . "unit" }}</td>
+                        <td>{{itemPrice . "total"}}</td>
+                        <td>{{itemPrice . "volume"}}</td>
+                    </tr>
+                    {{end}}
+                    </tbody>
+                    {{end}}
+                    {{else}}
+                    <tbody>
+                    {{range .Paste.Items}}
+                    <tr>
+                        <td class="item-name"><img src="https://imageserver.eveonline.com/Type/{{.TypeId}}_32.png" width="32" height="32"> <a href="https://eve-central.com/home/quicklook.html?typeid={{.TypeId}}">{{.TypeName}}</a></td>
+                        <td class="item-quantity">{{comma .Quantity}}</td>
+                        <td class="item-volume">{{.Volume}}</td>
+                        <td>{{itemPrice . "unit" }}</td>
+                        <td>{{itemPrice . "total"}}</td>
+                        <td>{{itemPrice . "volume"}}</td>
+                    </tr>
+                    {{end}}
+                    </tbody>
+                    {{end}}
+                    <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            {{i18n .Lang "total_sell_value"}}<br/>
+                            {{i18n .Lang "total_buy_value"}}<br/>
+                            {{i18n .Lang "total_volume"}}
+                        </td>
+                        <td colspan="3">
+                            {{commaF .Paste.TotalSellPrice}} ISK<br/>
+                            {{commaF .Paste.TotalBuyPrice}} ISK<br/>
+                            {{commaF .Paste.TotalVolume}}m3
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<app-export paste-id="{{.Paste.EncodedID}}"></app-export>
