@@ -31,11 +31,12 @@ func Parse(text string) (string, []entity.Item) {
 
 	parsers := []Parser{
 		&ContractParser{},
-		&DscanParser{},
 		&InventoryParser{},
 		&ViewContentsParser{},
 		&ListParser{},
 		&CargoScanParser{},
+		&SurveyScanParser{},
+		&DscanParser{},
 		&PIParser{},
 		&EFTParser{},
 		&DNAParser{},
