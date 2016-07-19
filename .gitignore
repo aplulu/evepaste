@@ -2,4 +2,6 @@ node_modules/
 bower_components/
 .idea
 *.iml
-resources/compiled/*
+main/conf/app.conf
+main/static/*
+
