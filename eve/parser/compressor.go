@@ -68,7 +68,7 @@ var ORE_COMPRESS_TABLE = map[int32]int32 {
 
 	20: 28410, // Kernite
 	17452: 28411, // Luminous Kernite
-	17453: 28471, // Fiery Kernite
+	17453: 28409, // Fiery Kernite
 };
 
 var ICE_COMPRESS_TABLE = map[int32]int32 {
@@ -99,6 +99,8 @@ func CompressItems(items []entity.Item) []entity.Item {
 	for _, item := range items {
 		// ORE
 		if compressedId, ok := ORE_COMPRESS_TABLE[item.TypeId]; ok {
+			item.OriginalTypeId = item.TypeId
+			item.OriginalQuantity = item.Quantity
 			quantity := item.Quantity
 			// あまり
 			item.Quantity = quantity % 100
@@ -123,6 +125,9 @@ func CompressItems(items []entity.Item) []entity.Item {
 			}
 		// ICE
 		} else if compressedId, ok := ICE_COMPRESS_TABLE[item.TypeId]; ok {
+			item.OriginalTypeId = item.TypeId
+			item.OriginalQuantity = item.Quantity
+
 			t := repository.GetTypeByID(compressedId)
 			if t != nil {
 				item.TypeName = t.GetName("en")
@@ -150,6 +155,9 @@ func DecompressItems(items []entity.Item) []entity.Item {
 	for _, item := range items {
 		// ORE
 		if decompressedId := getDecompressedOreTypeId(item.TypeId); decompressedId != 0 {
+			item.OriginalTypeId = item.TypeId
+			item.OriginalQuantity = item.Quantity
+
 			t := repository.GetTypeByID(decompressedId)
 			if t != nil {
 				//item.TypeName = *t.Name
@@ -166,6 +174,9 @@ func DecompressItems(items []entity.Item) []entity.Item {
 			}
 			// ICE
 		} else if decompressedId := getDecompressedIceTypeId(item.TypeId); decompressedId != 0 {
+			item.OriginalTypeId = item.TypeId
+			item.OriginalQuantity = item.Quantity
+
 			t := repository.GetTypeByID(decompressedId)
 			if t != nil {
 				item.TypeName = t.GetName("en")
