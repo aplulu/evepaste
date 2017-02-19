@@ -7,7 +7,7 @@ import (
 )
 
 
-var ContractRegex *regexp.Regexp = regexp.MustCompile(`^([\S ]+)\t(\d+)\t([\S ]+)\t([\S ]+)(\t([\S ]+))?$`)
+var ContractRegex *regexp.Regexp = regexp.MustCompile(`^([\S ]+)\t([\d,\.]+)\t([\S ]+)\t([\S ]+)(\t([\S ]+))?$`)
 
 type ContractParser struct {
 	BaseParser
