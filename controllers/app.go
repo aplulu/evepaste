@@ -18,6 +18,16 @@ type AppController struct {
 
 func (c *AppController) Prepare() {
 	c.Data["StartTime"] = time.Now()
+
+	isSecure := c.Ctx.Request.TLS != nil || c.Ctx.Request.Header.Get("X-Forwarded-Proto") == "https";
+	if !isSecure {
+		url := "https://" + c.Ctx.Request.Host + c.Ctx.Request.RequestURI
+
+		c.Redirect(url, 301)
+		return
+
+	}
+
 	c.Controller.Prepare()
 	beegae.ReadFromRequest(&c.Controller)
 
