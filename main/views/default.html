@@ -49,7 +49,7 @@
           </ul>
         </li>
         {{else}}
-        <li><a href="{{urlfor `AccountsController.Login`}}">{{i18n .Lang "login"}}</a></li>
+        <li class="login"><a href="{{urlfor `AccountsController.Login`}}"><img src="/img/eve_sso.png" width="195" height="30" alt="{{i18n .Lang `login`}}"/></a></li>
         {{end}}
       </ul>
     </div>
