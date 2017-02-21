@@ -12,4 +12,9 @@ type Item struct {
 	Distance int64 `json:"distance,omitempty"`
 	SlotType string `json:"slot_type,omitempty"`
 	ChargeTypeId int32 `json:"charge_type_id,omitempty"`
+	ItemGroupKey string `json:"item_group_key,omitempty"`
+	ItemGroupName string `json:"item_group_name,omitempty"`
+	OriginalTypeId int32 `json:"original_type_id,omitempty"`
+	OriginalTypeName string `json:"-"`
+	OriginalQuantity int `json:"original_quantity,omitempty"`
 }

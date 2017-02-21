@@ -8,6 +8,7 @@ import (
 	"time"
 	"golang.org/x/oauth2"
 	"encoding/json"
+	"google.golang.org/appengine"
 )
 
 type AppController struct {
@@ -20,7 +21,7 @@ func (c *AppController) Prepare() {
 	c.Data["StartTime"] = time.Now()
 
 	isSecure := c.Ctx.Request.TLS != nil || c.Ctx.Request.Header.Get("X-Forwarded-Proto") == "https";
-	if !isSecure {
+	if !isSecure && !appengine.IsDevAppServer() {
 		url := "https://" + c.Ctx.Request.Host + c.Ctx.Request.RequestURI
 
 		c.Redirect(url, 301)
@@ -72,7 +73,7 @@ func (c *AppController) IsLogged() bool {
 	return c.User.ID > 0
 }
 
-func (c *AppController) CheckLogged() bool {
+func (c *AppController) ValidateLogged() bool {
 	if !c.IsLogged() {
 		flash := beegae.NewFlash()
 		flash.Error(i18n.Tr(c.Lang, "unauthorized"))

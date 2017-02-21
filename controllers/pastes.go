@@ -36,16 +36,7 @@ func (c *PastesController) Index() {
 func (c *PastesController) View() {
 	c.TplName = "pastes/view.html"
 
-	/*
-	id, err := strconv.ParseInt(c.Ctx.Input.Param(":id"), 10, 64)
-	if err != nil {
-		log.Println("ParseInt fail")
-		c.Abort("404")
-		return
-	}
-	*/
 	id := utils.DecodeBase62(c.Ctx.Input.Param(":id"))
-
 	p, err := paste.GetPaste(c.AppEngineCtx, id)
 	if err != nil {
 		log.Println(err)
@@ -60,6 +51,13 @@ func (c *PastesController) View() {
 	} else if p.Type == "fit" {
 		c.Data["IsFit"] = true
 		c.Data["Fit"] = entity.NewFitFromItems(p.Items)
+	} else {
+		groups := p.GetGroupedItems()
+		if len(groups) > 0 {
+			c.Data["IsGrouped"] = true
+			c.Data["Groups"] = groups
+
+		}
 	}
 
 	c.Data["Title"] = p.Type + ":" + p.EncodedID
@@ -214,7 +212,7 @@ func (c *PastesController) NewPaste() {
 	c.Ctx.Input.Bind(&decompressOre, "decompress_ore")
 
 	p := paste.NewPaste(text, systemId)
-	if !p.Valid() {
+	if !p.IsValid() {
 		flash.Error(i18n.Tr(c.Lang, "unable_parse"))
 		flash.Store(&c.Controller)
 		c.Ctx.Redirect(302, "/")
@@ -258,7 +256,7 @@ func (c *PastesController) NewPaste() {
  * Paste history
  */
 func (c *PastesController) History() {
-	if !c.CheckLogged() {
+	if !c.ValidateLogged() {
 		return
 	}
 	c.TplName = "pastes/history.html"

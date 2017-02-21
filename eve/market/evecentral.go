@@ -26,9 +26,9 @@ func (r *EVECentralResult) TypeId() int32 {
 func (r *EVECentralResult) ToPrice(isUniverse bool) entity.Price {
 	return entity.Price{
 		TypeId: r.TypeId(),
-		Buy: r.Buy.ToPriceItem(isUniverse),
-		All: r.All.ToPriceItem(isUniverse),
-		Sell: r.Sell.ToPriceItem(isUniverse),
+		Buy: r.Buy.ToPriceItem(isUniverse, "buy"),
+		All: r.All.ToPriceItem(isUniverse, "all"),
+		Sell: r.Sell.ToPriceItem(isUniverse, "sell"),
 	}
 }
 
@@ -42,11 +42,16 @@ type EVECentralPriceItem struct {
 	FivePercent float64 `json:"fivePercent"`
 }
 
-func (i *EVECentralPriceItem) ToPriceItem(isUniverse bool) entity.PriceItem {
-	price := i.Avg
-	if isUniverse {
-		price = i.FivePercent
+func (i *EVECentralPriceItem) ToPriceItem(isUniverse bool, t string) entity.PriceItem {
+	price := i.FivePercent
+	if !isUniverse {
+		if t == "buy" {
+			price = i.Max
+		} else if t == "sell" {
+			price = i.Min
+		}
 	}
+
 	return entity.PriceItem{
 		Avg: i.Avg,
 		Median: i.Median,

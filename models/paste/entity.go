@@ -38,7 +38,7 @@ type Paste struct {
 /**
  * Validates
  */
-func (p *Paste) Valid() bool {
+func (p *Paste) IsValid() bool {
 	return p.Type != "" && p.Text != "" && len(p.Items) > 0
 }
 
@@ -186,4 +186,46 @@ func (p *Paste) buildPriceTable() {
  * Export EFT
  */
 func (p *Paste) exportEFT(lang string) {
+}
+
+func (p *Paste) GetGroupedItems() ([]entity.ItemGroup) {
+	groupMap := make(map[string]*entity.ItemGroup)
+	items := make([]entity.Item, 0)
+
+	for _, i := range p.Items {
+		if i.ItemGroupKey != "" {
+			g, ok := groupMap[i.ItemGroupKey]
+			if !ok {
+				g = entity.NewItemGroup(i.ItemGroupKey, i.ItemGroupName)
+				groupMap[i.ItemGroupKey] = g
+			}
+
+			g.Items = append(g.Items, i)
+			quantity := float64(i.Quantity)
+			g.TotalBuyPrice += i.Prices.Buy.Price * quantity
+			g.TotalSellPrice += i.Prices.Sell.Price * quantity
+			g.TotalVolume += i.Volume * quantity
+		} else {
+			items = append(items, i)
+		}
+	}
+
+	groups := make([]entity.ItemGroup, 0)
+	for _, g := range groupMap {
+		groups = append(groups, *g)
+	}
+
+	if len(items) > 0 {
+		g := entity.NewItemGroup("other", "Other")
+		for _, i := range items {
+			g.Items = append(g.Items, i)
+			quantity := float64(i.Quantity)
+			g.TotalBuyPrice += i.Prices.Buy.Price * quantity
+			g.TotalSellPrice += i.Prices.Sell.Price * quantity
+			g.TotalVolume += i.Volume * quantity
+		}
+		groups = append(groups, *g)
+	}
+
+	return groups
 }

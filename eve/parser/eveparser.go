@@ -38,6 +38,7 @@ func Parse(text string) (string, []entity.Item) {
 		&SurveyScanParser{},
 		&DscanParser{},
 		&PIParser{},
+		&LootHistoryParser{},
 		&EFTParser{},
 		&DNAParser{},
 		&CLFParser{},
@@ -110,6 +111,14 @@ func ApplyI18nName(items []entity.Item, lang string) []entity.Item {
 		t := repository.GetTypeByID(item.TypeId)
 		if t != nil {
 			items[i].TypeName = t.GetName(lang)
+			items[i].Volume = *t.Volume
+		}
+
+		if item.OriginalTypeId != 0 {
+			t := repository.GetTypeByID(item.OriginalTypeId)
+			if t != nil {
+				items[i].OriginalTypeName = t.GetName(lang)
+			}
 		}
 	}
 	return items
