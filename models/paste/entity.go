@@ -216,7 +216,7 @@ func (p *Paste) GetGroupedItems() ([]entity.ItemGroup) {
 	}
 
 	if len(items) > 0 {
-		g := entity.NewItemGroup("other", "Other")
+		g := entity.NewItemGroup("others", "Others")
 		for _, i := range items {
 			g.Items = append(g.Items, i)
 			quantity := float64(i.Quantity)

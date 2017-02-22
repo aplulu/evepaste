@@ -53,7 +53,7 @@ func (c *PastesController) View() {
 		c.Data["Fit"] = entity.NewFitFromItems(p.Items)
 	} else {
 		groups := p.GetGroupedItems()
-		if len(groups) > 0 {
+		if len(groups) > 1 {
 			c.Data["IsGrouped"] = true
 			c.Data["Groups"] = groups
 
@@ -248,7 +248,6 @@ func (c *PastesController) NewPaste() {
 		return
 	}
 
-	//c.Ctx.Redirect(302, "/p/" + strconv.FormatInt(p.ID, 10))
 	c.Ctx.Redirect(302, "/p/" + utils.EncodeBase62(p.ID))
 }
 
