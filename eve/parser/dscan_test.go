@@ -8,15 +8,15 @@ import (
 
 func TestDscanParse(t *testing.T) {
 	testCases := []test.ParserTestCase{{
-		`Frosty	Bifrost	1,002 km
-Best Squad	Caldari Control Tower Small	-`,
+		`14	Earled X - Moon 9	Moon	2,188,990 km
+26561	Gistii Hijacker Wreck	Angel Small Wreck	-`,
 		[]entity.Item{
 			entity.Item{
-				TypeName: `Bifrost`,
+				TypeName: `Moon`,
 				Quantity: 1,
 			},
 			entity.Item{
-				TypeName: `Caldari Control Tower Small`,
+				TypeName: `Angel Small Wreck`,
 				Quantity: 1,
 			},
 		},
