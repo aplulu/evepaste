@@ -1,0 +1,16 @@
+runtime: go111
+main: ./cmd/server
+
+handlers:
+- url: /js
+  static_dir: static/js
+- url: /css
+  static_dir: static/css
+- url: /fonts
+  static_dir: static/fonts
+- url: /img
+  static_dir: static/img
+- url: /.*
+  script: auto
+  secure: optional
+

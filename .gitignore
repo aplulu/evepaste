@@ -1,7 +1,8 @@
+.envrc
 node_modules/
 bower_components/
 .idea
 *.iml
-main/conf/app.conf
-main/static/*
+conf/app.conf
+static/*
 

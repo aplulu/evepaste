@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package entity;
+
+import "locale_text.proto";
+
+message Constellation {
+    required int32 id = 1;
+    required int32 region_id = 2;
+    repeated LocaleText names = 3;
+}

@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package entity;
+
+import "locale_text.proto";
+
+message InvType {
+    required int32 id = 1;
+    repeated LocaleText names = 2;
+    required int32 group_id = 3;
+    required double volume = 4;
+    optional double base_price = 5;
+    optional int32 market_group_id = 6;
+    optional int32 effect_id = 7;
+}

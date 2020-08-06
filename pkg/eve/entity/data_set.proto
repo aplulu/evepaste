@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package entity;
+
+import "inv_type.proto";
+import "inv_group.proto";
+import "inv_category.proto";
+import "solarsystem.proto";
+import "constellation.proto";
+import "region.proto";
+
+message DataSet {
+    repeated InvType types = 1;
+    repeated InvGroup groups = 2;
+    repeated InvCategory categories = 3;
+    repeated SolarSystem solar_systems = 4;
+    repeated Constellation constellations = 5;
+    repeated Region regions = 6;
+}

@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <form action="/" method="post">
+            <textarea class="form-control" rows="6" name="text" id="textArea" placeholder="{{i18nH .Lang `text_placeholder`}}"></textarea>
+            <div class="form-group form-submit">
+                <div class="col-sm-7">
+                    <button type="submit" class="btn btn-primary">{{i18n .Lang "submit"}}</button>
+                    <button type="reset" class="btn btn-default">{{i18n .Lang "reset"}}</button>
+                </div>
+                <div class="col-sm-5">
+                    <select class="form-control" name="system_id">
+                        {{range .Systems}}
+                        <option value="{{.}}" {{if eq "30000142" .}}selected="selected"{{end}}>{{systemName $.Lang .}}</option>
+                        {{end}}
+                    </select>
+                </div>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="compress_ore"> {{i18n .Lang "compress_oreice"}}
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="decompress_ore"> {{i18n .Lang "decompress_oreice"}}
+                </label>
+            </div>
+        </form>
+    </div>
+</div>

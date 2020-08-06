@@ -1,7 +1,7 @@
 package test
 
 import (
-	_ "fareastdominions.com/evepaste/routers"
+	_ "github.com/evepaste/evepaste/routers"
 	"net/http"
 	"net/http/httptest"
 	"path/filepath"
